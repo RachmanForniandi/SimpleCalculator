@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import rachman.forniandi.simplecalculator.databinding.ActivityMainBinding
+import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +55,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onEqual(view: View) {
+        if (lastNumeric){
+            var tvValue = binding.tvInput.text.toString()
+            var previx =""
+            try {
+                if (tvValue.startsWith("-")){
+                    previx ="-"
+                    tvValue = tvValue.substring(1)
+                }
+                if (tvValue.contains("-")){
+                    val splitValue = tvValue.split("-")
 
+                    var one = splitValue[0]
+                    var two = splitValue[1]
+
+                    if (previx.isNotEmpty()){
+                        one = previx + one
+                    }
+                    //result
+                    binding.tvInput.text =(one.toDouble() - two.toDouble()).toString()
+                }
+
+            }catch (e:ArithmeticException){
+                e.printStackTrace()
+            }
+        }
     }
 
     fun onDecimalPoint(view: View) {
