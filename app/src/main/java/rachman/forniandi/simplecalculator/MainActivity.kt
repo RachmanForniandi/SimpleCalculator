@@ -26,11 +26,31 @@ class MainActivity : AppCompatActivity() {
     fun onDigit(view: View){
         binding.tvInput.append((view as Button).text)
         lastNumeric = true
+        //lastDot = false
     }
 
 
     fun onOperator(view: View) {
+        binding.tvInput?.text?.let {
 
+            if (lastNumeric && !isMathOperatorAdded(it.toString())){
+                binding.tvInput?.append((view as Button).text)
+                lastNumeric = false
+                lastDot = false
+            }
+        }
+    }
+
+    private fun isMathOperatorAdded(value: String): Boolean {
+        return if (value.startsWith("-")){
+            false
+        }else{
+            (value.contains("/")
+                    || value.contains("*")
+                    || value.contains("+")
+                    || value.contains("-")
+                    )
+        }
     }
 
     fun onEqual(view: View) {
@@ -38,11 +58,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDecimalPoint(view: View) {
-
+        if (lastNumeric && !lastDot){
+            binding.tvInput.append(".")
+            lastNumeric = false
+            lastDot = true
+        }
     }
 
     fun onClear(view: View){
-        //binding.tvInput.text=""
-        binding.tvInput.text="0"
+        binding.tvInput.text=""
+        //binding.tvInput.text="0"
     }
 }
