@@ -32,10 +32,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onOperator(view: View) {
-        binding.tvInput?.text?.let {
+        binding.tvInput.text?.let {
 
             if (lastNumeric && !isMathOperatorAdded(it.toString())){
-                binding.tvInput?.append((view as Button).text)
+                binding.tvInput.append((view as Button).text)
                 lastNumeric = false
                 lastDot = false
             }
@@ -63,23 +63,83 @@ class MainActivity : AppCompatActivity() {
                     previx ="-"
                     tvValue = tvValue.substring(1)
                 }
-                if (tvValue.contains("-")){
+                when{
+                    tvValue.contains("/")->{
+                        val splitValue = tvValue.split("/")
+
+                        var one = splitValue[0]
+                        val two = splitValue[1]
+
+                        if (previx.isNotEmpty()){
+                            one = previx + one
+                        }
+                        //result
+                        binding.tvInput.text = removeZeroAfterDot((one.toDouble() / two.toDouble()).toString())
+                    }
+
+                    tvValue.contains("*")->{
+                        val splitValue = tvValue.split("*")
+
+                        var one = splitValue[0]
+                        val two= splitValue[1]
+
+                        if (previx.isNotEmpty()){
+                            one = previx + one
+                        }
+                        //result
+                        binding.tvInput.text =removeZeroAfterDot((one.toDouble() * two.toDouble()).toString())
+                    }
+
+                    tvValue.contains("+")->{
+                        val splitValue = tvValue.split("+")
+
+                        var one = splitValue[0]
+                        val two= splitValue[1]
+
+                        if (previx.isNotEmpty()){
+                            one = previx + one
+                        }
+                        //result
+                        binding.tvInput.text =removeZeroAfterDot((one.toDouble() + two.toDouble()).toString())
+                    }
+
+                    tvValue.contains("-")->{
+                        val splitValue = tvValue.split("-")
+
+                        var one = splitValue[0]
+                        val two= splitValue[1]
+
+                        if (previx.isNotEmpty()){
+                            one = previx + one
+                        }
+                        //result
+                        binding.tvInput.text =removeZeroAfterDot((one.toDouble() - two.toDouble()).toString())
+                    }
+                }
+                /*if (tvValue.contains("-")){
                     val splitValue = tvValue.split("-")
 
                     var one = splitValue[0]
-                    var two = splitValue[1]
+                    val two= splitValue[1]
 
                     if (previx.isNotEmpty()){
                         one = previx + one
                     }
                     //result
-                    binding.tvInput.text =(one.toDouble() - two.toDouble()).toString()
-                }
+                    binding.tvInput.text =removeZeroAfterDot((one.toDouble() - two.toDouble()).toString())
+                }*/
 
             }catch (e:ArithmeticException){
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun removeZeroAfterDot(result:String):String{
+        var value = result
+        if (result.contains(".0"))
+            value = result.substring(0,result.length - 2)
+        return value
     }
 
     fun onDecimalPoint(view: View) {
@@ -92,6 +152,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onClear(view: View){
         binding.tvInput.text=""
+        lastNumeric = false
+        lastDot = false
         //binding.tvInput.text="0"
     }
 }
